@@ -1,8 +1,8 @@
 public class MoveMark {
-    private final TicTacToe.Mark mark;
+    private final Player mark;
     private final Move move;
 
-    public MoveMark(TicTacToe.Mark mark, Move move) {
+    public MoveMark(Player mark, Move move) {
         this.mark = mark;
         this.move = move;
     }
@@ -15,7 +15,7 @@ public class MoveMark {
                 '}';
     }
 
-    public TicTacToe.Mark getMark() {
+    public Player getMark() {
         return mark;
     }
 

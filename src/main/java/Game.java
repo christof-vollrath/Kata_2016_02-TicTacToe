@@ -2,14 +2,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
-    private final TicTacToeDeterministicStrategy strategyX;
-    private final TicTacToeDeterministicStrategy strategyO;
-    TicTacToe ticTacToe = new TicTacToe();
-    TicTacToe.Mark currentPlayer = TicTacToe.Mark.X;
+    private final Strategy strategyX;
+    private final Strategy strategyO;
+    Board board = new Board();
+    Player currentPlayer = Player.X;
     List<MoveMark> moves = new LinkedList<>();
 
 
-    public Game(TicTacToeDeterministicStrategy strategyX, TicTacToeDeterministicStrategy strategyO) {
+    public Game(Strategy strategyX, Strategy strategyO) {
         this.strategyX = strategyX;
         this.strategyO = strategyO;
     }
@@ -17,23 +17,23 @@ public class Game {
     public void play() {
         for(;;) {
             MoveMark moveMark;
-            if (currentPlayer == TicTacToe.Mark.X) {
-                Move nextMove = strategyX.nextMove(ticTacToe);
+            if (currentPlayer == Player.X) {
+                Move nextMove = strategyX.nextMove(currentPlayer, board);
                 if (nextMove == null) return;
-                moveMark = new MoveMark(TicTacToe.Mark.X, nextMove);
+                moveMark = new MoveMark(Player.X, nextMove);
             } else {
-                Move nextMove = strategyO.nextMove(ticTacToe);
+                Move nextMove = strategyO.nextMove(currentPlayer, board);
                 if (nextMove == null) return;
-                moveMark = new MoveMark(TicTacToe.Mark.O, nextMove);
+                moveMark = new MoveMark(Player.O, nextMove);
             }
 
-            ticTacToe.set(moveMark);
+            board.set(moveMark);
             moves.add(moveMark);
             System.out.println(moveMark);
-            System.out.println(ticTacToe);
-            TicTacToe.Mark winner = ticTacToe.getWinner();
+            System.out.println(board);
+            Player winner = TicTacToe.getWinner(board);
             if (winner != null) return;
-            switchPlayer();
+            currentPlayer = switchPlayer(currentPlayer);
         }
     }
 
@@ -41,12 +41,12 @@ public class Game {
         return moves;
     }
 
-    public TicTacToe getEndPosition() {
-        return ticTacToe;
+    public Board getEndPosition() {
+        return board;
     }
 
-    void switchPlayer() {
-        if (currentPlayer == TicTacToe.Mark.X) currentPlayer = TicTacToe.Mark.O;
-        else currentPlayer = TicTacToe.Mark.X;
+    public static Player switchPlayer(Player mark) {
+        if (mark == Player.X) return Player.O;
+        else return Player.X;
     }
 }
